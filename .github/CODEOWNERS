@@ -1,0 +1,31 @@
+# CODEOWNERS file
+# This file defines who is responsible for code in the repository.
+# These owners will be requested for review when PRs modify matching paths.
+#
+# Format: [pattern] @owner1 @owner2
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repo
+# * @username
+
+# Backend code
+# /src/ @backend-team
+# /api/ @backend-team
+
+# Frontend code
+# /frontend/ @frontend-team
+# /web/ @frontend-team
+
+# Infrastructure
+# /infrastructure/ @devops-team
+# /terraform/ @devops-team
+# /docker/ @devops-team
+
+# Documentation
+# /docs/ @docs-team
+# *.md @docs-team
+
+# Configuration files
+# *.json @maintainers
+# *.yaml @maintainers
+# *.yml @maintainers
