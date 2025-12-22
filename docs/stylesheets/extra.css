@@ -1,0 +1,144 @@
+/* Custom styles for AWS MLA Study Notes */
+
+:root {
+  --md-primary-fg-color: #232f3e;
+  --md-primary-fg-color--light: #37475a;
+  --md-primary-fg-color--dark: #131920;
+  --md-accent-fg-color: #ff9900;
+}
+
+/* AWS-themed header */
+.md-header {
+  background: linear-gradient(135deg, #232f3e 0%, #37475a 50%, #232f3e 100%);
+}
+
+/* Navigation tabs styling */
+.md-tabs {
+  background: #1a252f;
+}
+
+.md-tabs__link {
+  font-weight: 500;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.md-tabs__link:hover {
+  opacity: 1;
+}
+
+/* Hide sidebar nav on homepage */
+.md-nav--primary > .md-nav__list > .md-nav__item:first-child {
+  display: none;
+}
+
+/* Domain-specific tab colors - Data Prep (Blue) */
+.md-tabs__item:nth-child(3) .md-tabs__link {
+  background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+}
+
+/* Modeling (Green) */
+.md-tabs__item:nth-child(4) .md-tabs__link {
+  background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+}
+
+/* Deployment (Orange) */
+.md-tabs__item:nth-child(5) .md-tabs__link {
+  background: linear-gradient(135deg, #e65100 0%, #ff9800 100%);
+}
+
+/* Security (Pink) */
+.md-tabs__item:nth-child(6) .md-tabs__link {
+  background: linear-gradient(135deg, #c2185b 0%, #e91e63 100%);
+}
+
+/* Practice Exams (Purple) */
+.md-tabs__item:nth-child(7) .md-tabs__link {
+  background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);
+}
+
+/* Active tab indicator */
+.md-tabs__link--active {
+  opacity: 1;
+  box-shadow: 0 -3px 0 0 #ff9900 inset;
+}
+
+/* Question styling for practice exams */
+.question {
+  border-left: 4px solid var(--md-primary-fg-color);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+}
+
+.question-number {
+  font-weight: bold;
+  color: var(--md-primary-fg-color);
+}
+
+/* Answer options */
+.answer-option {
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+  border-radius: 4px;
+  background: var(--md-code-bg-color);
+}
+
+.answer-option:hover {
+  background: var(--md-accent-fg-color--transparent);
+}
+
+/* Correct answer highlight */
+.correct-answer {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid #4caf50;
+}
+
+/* Domain badges */
+.domain-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.domain-1 {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+.domain-2 {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+.domain-3 {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+.domain-4 {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+/* Service reference cards */
+.service-card {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  transition: box-shadow 0.2s;
+}
+
+.service-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Lab difficulty indicators */
+.difficulty-easy {
+  color: #4caf50;
+}
+.difficulty-medium {
+  color: #ff9800;
+}
+.difficulty-hard {
+  color: #f44336;
+}

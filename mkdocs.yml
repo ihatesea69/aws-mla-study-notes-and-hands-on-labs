@@ -1,0 +1,154 @@
+site_name: AWS MLA-C01 Study Notes
+site_description: Study notes and hands-on labs for AWS Certified Machine Learning Engineer Associate exam
+site_author: ihatesea69
+site_url: https://ihatesea69.github.io/aws-mla-study-notes-and-hands-on-labs/
+
+repo_name: aws-mla-study-notes-and-hands-on-labs
+repo_url: https://github.com/ihatesea69/aws-mla-study-notes-and-hands-on-labs
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      accent: orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search:
+      lang: en
+  - tags
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ihatesea69
+  generator: false
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Exam Overview:
+      - exam-overview/index.md
+      - exam-overview/exam-domains.md
+      - exam-overview/in-scope-services.md
+  - Data Prep (28%):
+      - domain-1-data-preparation/index.md
+      - domain-1-data-preparation/data-ingestion.md
+      - domain-1-data-preparation/data-transformation.md
+      - domain-1-data-preparation/data-validation.md
+      - domain-1-data-preparation/feature-engineering.md
+      - domain-1-data-preparation/data-storage.md
+  - Modeling (26%):
+      - domain-2-model-development/index.md
+      - domain-2-model-development/sagemaker-training.md
+      - domain-2-model-development/built-in-algorithms.md
+      - domain-2-model-development/hyperparameter-tuning.md
+      - domain-2-model-development/model-evaluation.md
+      - domain-2-model-development/model-versioning.md
+      - domain-2-model-development/amazon-bedrock.md
+  - Deployment (22%):
+      - domain-3-deployment-orchestration/index.md
+      - domain-3-deployment-orchestration/sagemaker-endpoints.md
+      - domain-3-deployment-orchestration/batch-transform.md
+      - domain-3-deployment-orchestration/sagemaker-pipelines.md
+      - domain-3-deployment-orchestration/step-functions.md
+      - domain-3-deployment-orchestration/container-deployment.md
+      - domain-3-deployment-orchestration/auto-scaling.md
+  - Security (24%):
+      - domain-4-monitoring-security/index.md
+      - domain-4-monitoring-security/model-monitoring.md
+      - domain-4-monitoring-security/cloudwatch-logging.md
+      - domain-4-monitoring-security/cost-optimization.md
+      - domain-4-monitoring-security/iam-security.md
+      - domain-4-monitoring-security/compliance.md
+  - Practice Exams:
+      - practice-exams/index.md
+      - practice-exams/exam-01.md
+      - practice-exams/exam-02.md
+  - AWS Services:
+      - aws-services/index.md
+      - aws-services/sagemaker.md
+      - aws-services/bedrock.md
+      - aws-services/glue.md
+      - aws-services/comprehend-rekognition.md
+      - aws-services/other-ml-services.md
+  - Labs:
+      - hands-on-labs/index.md
+      - hands-on-labs/lab-01-data-wrangler.md
+      - hands-on-labs/lab-02-training-job.md
+      - hands-on-labs/lab-03-hyperparameter-tuning.md
+      - hands-on-labs/lab-04-endpoint-deployment.md
+      - hands-on-labs/lab-05-sagemaker-pipelines.md
+      - hands-on-labs/lab-06-model-monitoring.md
+  - Cheat Sheets:
+      - cheat-sheets/index.md
+      - cheat-sheets/services-comparison.md
+      - cheat-sheets/sagemaker-instance-types.md
+      - cheat-sheets/exam-tips.md
