@@ -24,3 +24,6 @@ Thumbs.db
 *.tmp
 *.temp
 *.log
+
+# Source exam text files (not for distribution)
+*.txt

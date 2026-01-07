@@ -92,6 +92,9 @@ extra:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/quiz-app.js
+
 nav:
   - Home: index.md
   - Exam Overview:
@@ -130,8 +133,8 @@ nav:
       - domain-4-monitoring-security/compliance.md
   - Practice Exams:
       - practice-exams/index.md
+      - practice-exams/quiz-mode.md
       - practice-exams/exam-01.md
-      - practice-exams/exam-02.md
   - AWS Services:
       - aws-services/index.md
       - aws-services/sagemaker.md
