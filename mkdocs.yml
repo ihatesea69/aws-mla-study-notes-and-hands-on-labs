@@ -135,6 +135,9 @@ nav:
       - practice-exams/index.md
       - practice-exams/quiz-mode.md
       - practice-exams/exam-01.md
+      - practice-exams/exam-02.md
+      - practice-exams/exam-03.md
+      - practice-exams/exam-04.md
   - AWS Services:
       - aws-services/index.md
       - aws-services/sagemaker.md

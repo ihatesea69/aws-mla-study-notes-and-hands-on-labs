@@ -110,4 +110,68 @@ input[type="number"] {
     color: #f44336;
     font-weight: bold;
 }
+/* Question Type Badges */
+.question-type-badge {
+    margin-bottom: 0.5rem;
+}
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.badge-warning {
+    background: #ff9800;
+    color: white;
+}
+.badge-info {
+    background: #2196f3;
+    color: white;
+}
+/* Ordering Question Styles */
+.ordering-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.ordering-select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    background: var(--md-default-bg-color);
+    min-width: 100px;
+}
+.ordering-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+/* Option Elimination Feature */
+.quiz-option {
+    position: relative;
+}
+.eliminate-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--md-default-fg-color--light);
+    opacity: 0.3;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.quiz-option:hover .eliminate-btn {
+    opacity: 0.7;
+}
+.quiz-option.eliminated {
+    text-decoration: line-through;
+    opacity: 0.5;
+    background: rgba(128, 128, 128, 0.1) !important;
+    border-color: var(--md-default-fg-color--lightest) !important;
+}
+.quiz-option.eliminated .eliminate-btn {
+    color: #f44336;
+    opacity: 1;
+}
 </style>

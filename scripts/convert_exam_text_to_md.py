@@ -10,38 +10,44 @@ DELETE_FILES = [
     r"c:\Users\LENOVO\Desktop\aws-mla-study-notes-and-hands-on-labs\docs\practice-exams\exam-02.md"
 ]
 
+def detect_question_type(q_text):
+    """
+    Detect question type based on keywords in question text.
+    Returns: (type, required_answers)
+    """
+    text_lower = q_text.lower()
+    
+    # Ordering questions
+    if "select and order" in text_lower:
+        # Extract number: "Select and order THREE" -> 3
+        match = re.search(r'select and order (\w+)', text_lower)
+        if match:
+            word = match.group(1)
+            num_map = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6}
+            count = num_map.get(word, 3)
+        else:
+            count = 3
+        return ("ordering", count)
+    
+    # Multiple Response questions
+    if "select two" in text_lower:
+        return ("multiple_response", 2)
+    if "select three" in text_lower:
+        return ("multiple_response", 3)
+    
+    # Default: Multiple Choice
+    return ("multiple_choice", 1)
+
+
 def parse_questions_new_format(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         text = f.read()
 
-    # Split by "Q" followed by digits at start of line or after newline
-    # Regex: \nQ\d+ or ^Q\d+
-    # But some might have spaces? Let's check the file content looked like "Q1\nCâu hỏi:..."
-    
-    # We can split by regex \nQ\d+(\r?\n|$)
-    chunks = re.split(r'\nQ\d+(?:\r?\n|$)', text)
-    
-    # The first chunk is header or empty
-    if "uvTổng hợp" in chunks[0] or not chunks[0].strip():
-        chunks.pop(0)
-
-    # Note: re.split consumes the delimiter. We might lose Q number if we don't capture it.
-    # Alternative: iterate line by line or use finditer.
-    # Let's try a regex that captures the full block.
-    
-    # Pattern:
-    # Q<id>
-    # Câu hỏi: <text>
-    # <Options>
-    # Đáp án đúng: ...
-    
     questions = []
     
-    # We will iterate through the text using a state machine approach or regex blocks because split is tricky with capturing.
-    # Actually, simpler: finding all starts "Q<number>"
-    
+    # Find all question starts "Q<number>"
     starts = [m.start() for m in re.finditer(r'^Q\d+\s*$', text, re.MULTILINE)]
-    starts.append(len(text)) # End of file
+    starts.append(len(text))  # End of file
     
     for i in range(len(starts) - 1):
         block = text[starts[i]:starts[i+1]].strip()
@@ -58,42 +64,25 @@ def parse_questions_new_format(file_path):
             content = '\n'.join(lines[1:])
             
             # Extract Question Text
-            # Starts with "Câu hỏi:"
-            # Ends before the first Option "*"
-            
-            # Regex for parts
-            # 1. Question Text
-            q_text_match = re.search(r'Câu hỏi:(.*?)(?=\n\*|\nĐáp án đúng:)', content, re.DOTALL)
+            q_text_match = re.search(r'Câu hỏi:(.*?)(?=\n\*|\n\d+\.\t|\nĐáp án đúng:)', content, re.DOTALL)
             if not q_text_match:
-                # Fallback: maybe no "Câu hỏi:" prefix in some? Or options start differently?
-                # Based on file, "Câu hỏi:" seems consistent.
                 print(f"Skipping Q{q_id}: 'Câu hỏi:' not found or format issue.")
                 continue
                 
             q_text = q_text_match.group(1).strip()
             
-            # 2. Options & Answer Parsing
-            # We need to scan the content line by line to handle multi-line options
+            # Detect question type
+            q_type, required_answers = detect_question_type(q_text)
             
             # Split content into lines to process statefully
             lines_content = content.replace('\r\n', '\n').split('\n')
             
             current_section = "question"
             q_text_lines = []
-            options_map = {} # { "A": ["line1", "line2"], ... }
+            options_map = {}  # { "A": ["line1", "line2"], ... }
+            ordering_steps = []  # For ordering questions: [{"step": 1, "text": "..."}, ...]
             current_opt_id = None
-            answer_line_index = -1
-            
-            # Find where "Đáp án đúng:" starts to stop option parsing
-            for idx, line in enumerate(lines_content):
-                if "Đáp án đúng:" in line:
-                    answer_line_index = idx
-                    break
-            
-            # If we found answer line, restrict content processing up to that point for Q&Options
-            # But wait, answer itself might be multi-line.
-            # Let's process systematically.
-            
+            current_step_num = None
             full_answer_text = ""
             
             for idx, line in enumerate(lines_content):
@@ -102,7 +91,6 @@ def parse_questions_new_format(file_path):
                 # Check for Answer trigger
                 if "Đáp án đúng:" in line:
                     current_section = "answer"
-                    # Capture the part after the colon
                     ans_part = line.split("Đáp án đúng:", 1)[1].strip()
                     full_answer_text += ans_part
                     continue
@@ -111,10 +99,7 @@ def parse_questions_new_format(file_path):
                     full_answer_text += " " + strip_line
                     continue
                 
-                # Check for Option trigger
-                # Pattern: * A. text or * A.text or *A. text
-                # We also need to handle cases where it might just be "A." without star if the format varies, 
-                # but based on file it seems to use *.
+                # Check for Option trigger (Multiple Choice / Multiple Response)
                 opt_match = re.match(r'^\*\s*([A-E])\.?\s*(.*)', strip_line)
                 if opt_match:
                     current_section = "option"
@@ -122,54 +107,103 @@ def parse_questions_new_format(file_path):
                     options_map[current_opt_id] = [opt_match.group(2).strip()]
                     continue
                 
+                # Check for Ordering step trigger: "1.	Step text" or "1.  Step text"
+                step_match = re.match(r'^(\d+)\.\s+(.*)', strip_line)
+                if step_match and q_type == "ordering":
+                    current_section = "ordering_step"
+                    current_step_num = int(step_match.group(1))
+                    step_text = step_match.group(2).strip()
+                    ordering_steps.append({"step": current_step_num, "text": step_text})
+                    continue
+                
                 # Check for Question text (start)
                 if "Câu hỏi:" in line:
-                    # Logic handled previously? No, we are iterating `content` which already stripped Q ID.
-                    # But `content` was `\n'.join(lines[1:])` from previous logic.
-                    # In `lines_content`, this line exists.
-                    # We might have "Câu hỏi: Blah..."
                     q_text_part = line.split("Câu hỏi:", 1)[1].strip()
                     q_text_lines.append(q_text_part)
                     continue
                 
                 # Handling continuations
                 if current_section == "question":
-                    if strip_line: # ignore empty lines if we want, or keep them
-                         q_text_lines.append(strip_line)
+                    if strip_line:
+                        q_text_lines.append(strip_line)
                 elif current_section == "option":
                     if strip_line and current_opt_id:
                         options_map[current_opt_id].append(strip_line)
+                elif current_section == "ordering_step":
+                    if strip_line and ordering_steps:
+                        ordering_steps[-1]["text"] += " " + strip_line
             
-            # Reconstruct
+            # Reconstruct question text
             q_text = ' '.join(q_text_lines).strip()
             
+            # Build options list
             options = []
-            for opt_id in sorted(options_map.keys()):
-                # Join lines with space
-                opt_text = ' '.join(options_map[opt_id]).strip()
-                options.append({
-                    "id": opt_id,
-                    "text": opt_text
-                })
+            if q_type == "ordering" and ordering_steps:
+                # For ordering: use steps as options
+                for step in ordering_steps:
+                    options.append({
+                        "id": str(step["step"]),
+                        "text": step["text"]
+                    })
+            else:
+                # Standard A/B/C/D options
+                for opt_id in sorted(options_map.keys()):
+                    opt_text = ' '.join(options_map[opt_id]).strip()
+                    options.append({
+                        "id": opt_id,
+                        "text": opt_text
+                    })
             
             # Parse Answer
             explanation = full_answer_text.strip()
-            correct_option = "?"
-            # Try to extract leading letter
-            # Typically "D. Optimize..."
-            # Remove any leading punctuation or space
-            clean_ans = explanation.lstrip(" .:")
-            match_letter = re.match(r'^([A-E])[\.\s]', clean_ans)
-            if match_letter:
-                correct_option = match_letter.group(1)
-            elif len(clean_ans) == 1 and clean_ans in "ABCDE":
-                correct_option = clean_ans 
+            correct_answer = "?"
+            
+            if q_type == "ordering":
+                # For ordering, answer is the sequence like "1,2,3" or parsed from "Step 1:..., Step 2:..."
+                # The answer format in source is: "1. Step 1: ..., 2. Step 2: ..."
+                # We'll store the correct order as comma-separated step numbers
+                step_order = re.findall(r'Step (\d+):', explanation)
+                if step_order:
+                    correct_answer = ",".join(step_order)
+                else:
+                    correct_answer = ",".join([str(s["step"]) for s in ordering_steps])
+            elif q_type == "multiple_response":
+                # Extract multiple letters from patterns like:
+                # "A. ... AND C. ..." or "A and B" or "A. ... AND B. ..."
+                # Look for pattern: Letter followed by "." and later "AND" followed by another Letter
+                # Search in the entire explanation text
+                
+                # First try to find explicit "AND" pattern
+                and_pattern = re.findall(r'\b([A-E])\.\s.*?AND\s+([A-E])\.', explanation, re.IGNORECASE | re.DOTALL)
+                if and_pattern:
+                    # Flatten tuples and get unique letters
+                    letters = list(and_pattern[0])  # e.g., ('A', 'C')
+                    correct_answer = ",".join(letters)
+                else:
+                    # Fallback: find all standalone letters at start of sentences
+                    letters = re.findall(r'(?:^|\.\s+)([A-E])\.', explanation)
+                    if len(letters) >= required_answers:
+                        correct_answer = ",".join(letters[:required_answers])
+                    else:
+                        # Last resort: find all letters in first 200 chars
+                        letters = re.findall(r'\b([A-E])\b', explanation[:200])
+                        correct_answer = ",".join(letters[:required_answers]) if letters else "?"
+            else:
+                # Single choice
+                clean_ans = explanation.lstrip(" .:")
+                match_letter = re.match(r'^([A-E])[\.\s]', clean_ans)
+                if match_letter:
+                    correct_answer = match_letter.group(1)
+                elif len(clean_ans) >= 1 and clean_ans[0] in "ABCDE":
+                    correct_answer = clean_ans[0]
 
             questions.append({
                 "id": q_id,
+                "type": q_type,
+                "required_answers": required_answers,
                 "question": q_text,
                 "options": options,
-                "answer": correct_option,
+                "answer": correct_answer,
                 "explanation": explanation
             })
             
@@ -178,11 +212,13 @@ def parse_questions_new_format(file_path):
             
     return questions
 
+
 def save_json(questions, output_path):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(questions, f, ensure_ascii=False, indent=2)
     print(f"Saved {len(questions)} questions to JSON.")
+
 
 def save_markdown(questions, output_path):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -195,12 +231,22 @@ def save_markdown(questions, output_path):
         
         for q in questions:
             f.write(f"## Question {q['id']}\n\n")
+            
+            # Add question type badge
+            if q['type'] == "multiple_response":
+                f.write(f"!!! warning \"Select {q['required_answers']}\"\n\n")
+            elif q['type'] == "ordering":
+                f.write(f"!!! warning \"Ordering - Arrange {q['required_answers']} Steps\"\n\n")
+            
             f.write(f"{q['question']}\n\n")
             
-            # Use a list for options to ensure proper separation
-            for opt in q['options']:
-                # Bold the Option ID (A, B, C...) for visibility
-                f.write(f"- **{opt['id']}.** {opt['text']}\n")
+            # Render options based on type
+            if q['type'] == "ordering":
+                for opt in q['options']:
+                    f.write(f"- **Step {opt['id']}.** {opt['text']}\n")
+            else:
+                for opt in q['options']:
+                    f.write(f"- **{opt['id']}.** {opt['text']}\n")
             
             f.write("\n")
             
@@ -210,7 +256,6 @@ def save_markdown(questions, output_path):
             
             # Handle explanation indentation for Admonition
             if q['explanation']:
-                # Indent every line of explanation by 4 spaces
                 explanation_indented = q['explanation'].replace('\n', '\n    ')
                 f.write(f"    {explanation_indented}\n")
             else:
@@ -220,6 +265,7 @@ def save_markdown(questions, output_path):
             
     print(f"Saved {len(questions)} questions to Markdown.")
 
+
 def cleanup_files():
     for fpath in DELETE_FILES:
         if os.path.exists(fpath):
@@ -228,6 +274,7 @@ def cleanup_files():
                 print(f"Deleted old file: {fpath}")
             except Exception as e:
                 print(f"Error deleting {fpath}: {e}")
+
 
 if __name__ == "__main__":
     if os.path.exists(SOURCE_FILE):

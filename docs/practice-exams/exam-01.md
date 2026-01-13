@@ -39,11 +39,16 @@ An ML engineer needs to deploy ML models to get inferences from large datasets i
 
 ## Question 3
 
-An ML engineer needs to use Amazon SageMaker to develop an ML solution for a company. The solution will use streaming video from cameras to count the number of people who walk past the company's store every day. Select and order the steps to implement the first version of the algorithm. (Select and order THREE) 1.	Determine if the challenge is a classification, detection, or segmentation problem. 2.	Decide the data input format and apply data augmentation if necessary. 3.	Choose a built-in algorithm or pre-trained model.
+!!! warning "Ordering - Arrange 3 Steps"
 
+An ML engineer needs to use Amazon SageMaker to develop an ML solution for a company. The solution will use streaming video from cameras to count the number of people who walk past the company's store every day. Select and order the steps to implement the first version of the algorithm. (Select and order THREE)
+
+- **Step 1.** Determine if the challenge is a classification, detection, or segmentation problem.
+- **Step 2.** Decide the data input format and apply data augmentation if necessary.
+- **Step 3.** Choose a built-in algorithm or pre-trained model.
 
 ??? success "Reveal Answer"
-    **Correct Answer: ?**
+    **Correct Answer: 1,2,3**
 
     1.	Step 1: Determine if the challenge is a classification, detection, or segmentation problem. 2.	Step 2: Decide the data input format and apply data augmentation if necessary. 3.	Step 3: Choose a built-in algorithm or pre-trained model. 3
 
@@ -163,11 +168,16 @@ An ML engineer needs to use AWS CloudFormation to create an ML model that an Ama
 
 ## Question 11
 
-An ML engineer needs to automate the rebuild and redeployment of an ML model. Updates will occur when changes are made to the model's code base. The ML engineer must use AWS services to configure a CI/CD pipeline. Select and order the steps to configure the CI/CD pipeline. (Select and order THREE) 1.	Create a Git source code repository. 2.	Create a pipeline in AWS CodePipeline. Build and test containers in AWS CodeBuild. 3.	Invoke Amazon SageMaker Pipelines to run all steps required for model training and deployment.
+!!! warning "Ordering - Arrange 3 Steps"
 
+An ML engineer needs to automate the rebuild and redeployment of an ML model. Updates will occur when changes are made to the model's code base. The ML engineer must use AWS services to configure a CI/CD pipeline. Select and order the steps to configure the CI/CD pipeline. (Select and order THREE)
+
+- **Step 1.** Create a Git source code repository.
+- **Step 2.** Create a pipeline in AWS CodePipeline. Build and test containers in AWS CodeBuild.
+- **Step 3.** Invoke Amazon SageMaker Pipelines to run all steps required for model training and deployment.
 
 ??? success "Reveal Answer"
-    **Correct Answer: ?**
+    **Correct Answer: 1,2,3**
 
     1.	Step 1: Create a Git source code repository. 2.	Step 2: Create a pipeline in AWS CodePipeline. Build and test containers in AWS CodeBuild. 3.	Step 3: Invoke Amazon SageMaker Pipelines to run all steps required for model training and deployment. 11
 
@@ -495,6 +505,8 @@ A company runs an Amazon SageMaker AI domain in a public subnet of a newly creat
 
 ## Question 32
 
+!!! warning "Select 2"
+
 An ML engineer is training a simple neural network model. The ML engineer tracks the performance of the model over time on a validation dataset. The model's performance improves substantially at first and then degrades after a specific number of epochs. Which solutions will mitigate this problem? (Select TWO)
 
 - **A.** Enable early stopping on the model.
@@ -504,7 +516,7 @@ An ML engineer is training a simple neural network model. The ML engineer tracks
 - **E.** Investigate and reduce the sources of model bias.
 
 ??? success "Reveal Answer"
-    **Correct Answer: A**
+    **Correct Answer: A,B**
 
     A. Enable early stopping on the model. AND B. Increase dropout in the layers. 32
 
@@ -604,6 +616,8 @@ An ML engineer is building a generative AI application on Amazon Bedrock by usin
 
 ## Question 39
 
+!!! warning "Select 2"
+
 An ML engineer has developed a binary classification model outside of Amazon SageMaker AI. The ML engineer needs to make the model accessible to a SageMaker Canvas user for additional tuning. The model artifacts are stored in an Amazon S3 bucket. The ML engineer and the Canvas user are part of the same SageMaker AI domain. Which combination of requirements must be met so that the ML engineer can share the model with the Canvas user? (Select TWO)
 
 - **A.** The ML engineer and the Canvas user must be in separate SageMaker AI domains.
@@ -613,7 +627,7 @@ An ML engineer has developed a binary classification model outside of Amazon Sag
 - **E.** The ML engineer must deploy the model to a SageMaker AI endpoint.
 
 ??? success "Reveal Answer"
-    **Correct Answer: B**
+    **Correct Answer: B,C**
 
     B. The Canvas user must have permissions to access the S3 bucket where the model artifacts are stored. AND C. The model must be registered in the SageMaker Model Registry. 41
 
@@ -793,6 +807,8 @@ A company is using Amazon SageMaker to deploy a new version of its ML model. Sel
 
 ## Question 51
 
+!!! warning "Select 2"
+
 An ML engineer is designing an AI-powered traffic management system to adjust traffic lights during predicted congestion. The system must use near real-time inference to generate predictions to help prevent traffic collisions. The system must use a batch processing pipeline to perform historical analysis of the predictions to continuously refine and improve the model. The historical analysis will take several hours to evaluate how well the predictions correlate with actual outcomes. The system must be able to scale inference endpoints appropriately to meet demand. Which combination of solutions will meet these requirements? (Select TWO)
 
 - **A.** Use Amazon SageMaker real-time inference endpoints. Configure the endpoints to scale automatically based on a target tracking scaling policy that uses the metric ConcurrentInvocationsPerInstance.
@@ -802,7 +818,7 @@ An ML engineer is designing an AI-powered traffic management system to adjust tr
 - **E.** Use an AWS Lambda function to perform the historical analysis. Use Amazon EventBridge to invoke the Lambda function.
 
 ??? success "Reveal Answer"
-    **Correct Answer: A**
+    **Correct Answer: A,C**
 
     A. Use Amazon SageMaker real-time inference endpoints. Configure the endpoints to scale automatically based on a target tracking scaling policy that uses the metric ConcurrentInvocationsPerInstance. AND C. Configure an Amazon SageMaker Processing job for batch analysis of historical prediction data. Use Amazon EventBridge to schedule the job to run daily. 55
 
